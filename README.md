@@ -58,7 +58,7 @@ travelDist: float // total travel distance, -1 on start events
 A custom `SourceFunction` serves a `DataStream[TaxiRide]` from this data set.
 In order to generate the stream as realistically as possible, events are emitted according to their
 timestamp. Two events that occurred ten minutes after each other in reality are served ten minutes apart.
-A speed-up factor can be specified to “fast-forward” the stream, i.e., with a speed-up factor of 2,
+A speed-up factor can be specified to "fast-forward" the stream, i.e., with a speed-up factor of 2,
 the events would be served five minutes apart. Moreover, you can specify a maximum serving delay
 which causes each event to be randomly delayed within the bound to simulate an out-of-order stream
 (a delay of 0 seconds results in an ordered stream). All examples operate in event-time mode.
@@ -145,21 +145,22 @@ Setting up Kibana and visualizing data that is stored in Elasticsearch is also e
 
 1. Access Kibana by opening [http://localhost:5601](http://localhost:5601) in your browser.
 
-1. Configure an index pattern by entering the index name “nyc-idx” and clicking on “Create”.
-Do not uncheck the “Index contains time-based events” option.
+1. Configure an index pattern by entering the index name "nyc-idx" and clicking on "Create".
+Do not uncheck the "Index contains time-based events" option.
 
-1. Click on the “Visualize” button at the top of the page, select “Tile map”, and click on “From a
-new search”.
+1. Select the time range to visualize with Kibana. Click on the "Last 15 minutes" label in the 
+top right corner and enter an absolute time range from 2013-01-01 to 2013-01-06 which is the time
+range of our taxi ride data stream. You can also configure a refresh interval to reload the page
+for updates.
+
+1. Click on the “Visualize” button at the top of the page, select "Tile map", and click on "From a
+new search".
 
 1. Next you need to configure the tile map visualization:
 
-  - Top-left: Configure the displayed value to be a “Sum” aggregation over the “cnt” field.
-  - Top-left: Select “Geo Coordinates” as bucket type and make sure that “location” is
+  - Top-left: Configure the displayed value to be a “Sum” aggregation over the "cnt" field.
+  - Top-left: Select "Geo Coordinates" as bucket type and make sure that "location" is
 configured as field.
-  - Top-right: Configure the time range which is displayed by Kibana.
-Click on “Last 15 Minutes” and enter an absolute time range starting at 2013-01-01 which is the day
-at which our taxi ride data set starts.
-  - Top-right: Configure an auto-refresh rate, for example 5 seconds.
   - Top-left: You can change the visualization type by clicking on “Options” (top left) and selecting
 for example a “Shaded Geohash Grid” visualization.
   - The visualization is started by clicking on the green play button.
@@ -188,7 +189,7 @@ mechanism. Flink is the first open source streaming engine that completely decou
 fault tolerance, allowing for richer forms of windows, such as sessions.
 
 - **Consistency, fault tolerance, and high availability**: Flink guarantees consistent operator state
-in the presence of failures (often called “exactly-once processing”), and consistent data movement
+in the presence of failures (often called "exactly-once processing"), and consistent data movement
 between selected sources and sinks (e.g., consistent data movement between Kafka and HDFS). Flink
 also supports master fail-over, eliminating any single point of failure.
 
