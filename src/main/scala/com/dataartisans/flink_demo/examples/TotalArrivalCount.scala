@@ -68,11 +68,13 @@ object TotalArrivalCount {
 
     // map location coordinates to cell Id, timestamp, and passenger count
     val cellIds: DataStream[(Int, Long, Short)] = cleansedRides
-      .map( r => ( NycGeoUtils.mapToGridCell(r.location), r.time.getMillis, r.passengerCnt ) )
+      .map { r =>
+        ( NycGeoUtils.mapToGridCell(r.location), r.time.getMillis, r.passengerCnt )
+      }
 
     val passengerCnts: DataStream[(Int, Long, Int)] = cellIds
       // key stream by cell Id
-      .keyBy( _._1 )
+      .keyBy(_._1)
       // sum passengers per cell Id and update time
       .fold((0, 0L, 0), (s: (Int, Long, Int), r: (Int, Long, Short)) =>
         { (r._1, s._2.max(r._2), s._3 + r._3) } )

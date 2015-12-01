@@ -24,6 +24,7 @@ import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow
 import org.apache.flink.util.Collector
 
 /**
@@ -73,19 +74,23 @@ object SlidingArrivalCount {
       // filter for events in NYC
       .filter( r => NycGeoUtils.isInNYC(r.location) )
 
-    // map location coordinates to cell Id and
+    // map location coordinates to cell Id, timestamp, and passenger count
     val cellIds: DataStream[(Int, Short)] = cleansedRides
       .map( r => ( NycGeoUtils.mapToGridCell(r.location), r.passengerCnt ) )
 
     val passengerCnts: DataStream[(Int, Long, Int)] = cellIds
       // key stream by cell Id
-      .keyBy( _._1 )
+      .keyBy(_._1)
       // define sliding window on keyed streams
       .timeWindow(Time.minutes(countWindowLength), Time.minutes(countWindowFrequency))
       // count events in window
-      .apply( (cell, window, events, out: Collector[(Int, Long, Int)]) => {
-        out.collect((cell, window.getEnd, events.map( _._2 ).sum ))
-      })
+      .apply { (
+                 cell: Int,
+                 window: TimeWindow,
+                 events: Iterable[(Int, Short)],
+                 out: Collector[(Int, Long, Int)]) =>
+        out.collect( ( cell, window.getEnd, events.map( _._2 ).sum ) )
+      }
 
     // map cell Id back to GeoPoint
     val cntByLocation: DataStream[(Int, Long, GeoPoint, Int)] = passengerCnts
