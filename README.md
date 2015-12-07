@@ -124,8 +124,9 @@ Follow these instructions to set up Elasticsearch and Kibana.
  }'
  ```
  **Note:** This mapping can be used for all demo application.
-1. Update a demo applications to write to Elasticsearch by changing the corresponding values in the
-source code, i.e., set `writeToElasticsearch = true` and configure the correct host name (see Elasticsearch's log output).
+1. Configure a demo application to write its results to Elasticsearch. For that you have to change the corresponding parameters in the demo applications source code:
+  - set `writeToElasticsearch = true`
+  - set `elasticsearchHost` to the correct host name (see Elasticsearch's log output)
 
 1. Run the Flink program to write its result to Elasticsearch.
 
@@ -148,10 +149,11 @@ Setting up Kibana and visualizing data that is stored in Elasticsearch is also e
 1. Configure an index pattern by entering the index name "nyc-idx" and clicking on "Create".
 Do not uncheck the "Index contains time-based events" option.
 
-1. Select the time range to visualize with Kibana. Click on the "Last 15 minutes" label in the 
-top right corner and enter an absolute time range from 2013-01-01 to 2013-01-06 which is the time
-range of our taxi ride data stream. You can also configure a refresh interval to reload the page
-for updates.
+1. Click on the "Discover" button at the top of the page. Kibana will tell you "No results found" 
+because we have to configure the time range of the data to visualize in Kibane. Click on the 
+"Last 15 minutes" label in the top right corner and enter an absolute time range from 2013-01-01 
+to 2013-01-06 which is the time range of our taxi ride data stream. You can also configure a 
+refresh interval to reload the page for updates.
 
 1. Click on the “Visualize” button at the top of the page, select "Tile map", and click on "From a
 new search".

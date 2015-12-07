@@ -47,9 +47,9 @@ object TotalArrivalCount {
     val servingSpeedFactor = 600f
 
     // Elasticsearch parameters
-    val writeToElasticsearch = false
-    val elasticsearchHost = ""
-    val elasticsearchPort = -1
+    val writeToElasticsearch = false // set to true to write results to Elasticsearch
+    val elasticsearchHost = "" // look-up hostname in Elasticsearch log output
+    val elasticsearchPort = 9300
 
 
     // set up streaming execution environment
