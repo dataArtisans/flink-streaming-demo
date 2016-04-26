@@ -94,6 +94,15 @@
 							<goal>testCompile</goal>
 						</goals>
 					</execution>
+
+					<!-- Make Scala source code visible to Maven.  This is required for
+                                             correct work of Eclipse/Scala integration. -->
+                                        <execution>
+                                        	<id>scala-add-source</id>
+                                        	<goals>
+                                        		<goal>add-source</goal>
+                                        	</goals>
+                                        </execution>
 				</executions>
 				<configuration>
 					<jvmArgs>
